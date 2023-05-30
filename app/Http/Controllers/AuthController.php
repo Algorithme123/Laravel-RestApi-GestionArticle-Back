@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InscriptionMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -32,6 +34,14 @@ class AuthController extends Controller
             'user' => $user,
             'token'=>$token
         ];
+        $info= [
+            'nom' => $fields['nom'] ,
+            'prenom'  => $fields['prenom'],
+            'email'  => $fields['email'],
+
+
+        ];
+        Mail::to($fields['email'])->send(new InscriptionMail($info));
         return response($response,201);
 
     }

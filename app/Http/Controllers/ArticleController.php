@@ -27,16 +27,22 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
+        $newArticle = $request->validate([
             'code'=> 'required',
             'libelle'=> 'required',
             'slug'=> 'required',
             'description'=> 'required',
             'prix'=> 'required',
         ]);
-        return Article::create($request->all());
-
-    }
+        $article= Article::create([
+            'code' => $newArticle['code'],
+            'libelle' => $newArticle['libelle'],
+            'slug' => $newArticle['slug'],
+            'description' => $newArticle['description'],
+            'prix' => $newArticle['prix']
+        ]);
+        return response($article,201);
+    } 
 
     /**
      * Display the specified resource.

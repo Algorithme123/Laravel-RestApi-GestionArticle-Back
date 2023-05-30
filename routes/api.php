@@ -26,23 +26,33 @@ Route::post('/articles',[ArticleController::class,'store']);
 
 */
 
-Route::resource('articles',ArticleController::class);
+/* ---------------------------------------------------------------------------------------------------
+
+                                            Public routes
+
+---------------------------------------------------------------------------------------------------- */
+// Route::resource('articles',ArticleController::class);
+
+
+Route::get('/articles/{id}',[ArticleController::class,'show']);
+Route::get('/articles',[ArticleController::class,'index']);
 Route::get('/articles/search/{libelle}',[ArticleController::class,'search']);
 
 
-// Route::post('/articles',function(){
 
-//     return Article::create([
+/* ---------------------------------------------------------------------------------------------------
 
+                                    Protected routes
 
-//         'code'=>"Article330",
-//         'libelle'=>" Produit ",
-//         'slug'=>"Pro-Duit",
-//         'description'=>"Pro produit",
-//         'prix'=>"67.98",
-//     ]
-//     );
-// });
+---------------------------------------------------------------------------------------------------- */
+Route::group(['middleware'=>['auth:sanctum']],function(){
+
+    Route::post('/articles',[ArticleController::class,'store']);
+    Route::put('/articles/{id}',[ArticleController::class,'update']);
+    Route::delete('/articles/{id}',[ArticleController::class,'destroy']);
+
+});
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -16,9 +16,11 @@ class InscriptionMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    private $info;
+    public function __construct($info)
     {
         //
+        $this->info = $info;
     }
 
     /**
@@ -28,6 +30,6 @@ class InscriptionMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('emails.inscription',['info'=>$this->info]);
     }
 }

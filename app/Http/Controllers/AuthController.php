@@ -43,4 +43,33 @@ class AuthController extends Controller
             'message' => "Deconnexion"
         ];
     }
+
+
+    public function login(Request $request){
+        $fields= $request -> validate([
+            'email' => 'required |string',
+            'password' => 'required | string',
+        ]);
+
+        // verification de l'email
+        $user = User::where('email',$fields['email'])->first();
+
+        // verification du mot de passe
+
+        if(!$user || !Hash::check($fields['password'], $user->password)){
+            return response([
+                'message' => "Identifiant ou mot de passe incorrect"
+            ],401);
+        }
+
+
+
+        $token = $user -> createToken('gdktoken')->plainTextToken;
+        $response =[
+            'user' => $user,
+            'token'=>$token
+        ];
+        return response($response,201);
+
+    }
 }

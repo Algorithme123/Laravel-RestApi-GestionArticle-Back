@@ -35,6 +35,7 @@ Route::post('/articles',[ArticleController::class,'store']);
 // Route::resource('articles',ArticleController::class);
 
 Route::post('/auth/register',[AuthController::class,'register']);
+Route::post('/auth/login',[AuthController::class,'login']);
 
 
 Route::get('/articles/{id}',[ArticleController::class,'show']);

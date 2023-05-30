@@ -5,6 +5,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,8 @@ Route::post('/articles',[ArticleController::class,'store']);
 ---------------------------------------------------------------------------------------------------- */
 // Route::resource('articles',ArticleController::class);
 
+Route::post('/auth/register',[AuthController::class,'register']);
+
 
 Route::get('/articles/{id}',[ArticleController::class,'show']);
 Route::get('/articles',[ArticleController::class,'index']);
@@ -50,6 +53,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/articles',[ArticleController::class,'store']);
     Route::put('/articles/{id}',[ArticleController::class,'update']);
     Route::delete('/articles/{id}',[ArticleController::class,'destroy']);
+
+    // logout
+    Route::post('/auth/logout',[AuthController::class,'logout']);
+
 
 });
 

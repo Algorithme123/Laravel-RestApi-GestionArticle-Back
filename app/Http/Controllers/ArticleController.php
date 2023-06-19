@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -15,7 +17,9 @@ class ArticleController extends Controller
     public function index()
     {
 
-        return Article::all();
+        $articles = Article::all();
+        return response()->json(['articles' => $articles]);
+        // return response()->json($articles);
     }
 
     /**
@@ -27,22 +31,54 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
 
-        $newArticle = $request->validate([
+        $validator = Validator::make($request->all(),[
             'code'=> 'required',
             'libelle'=> 'required',
             'slug'=> 'required',
             'description'=> 'required',
             'prix'=> 'required',
+
         ]);
-        $article= Article::create([
-            'code' => $newArticle['code'],
-            'libelle' => $newArticle['libelle'],
-            'slug' => $newArticle['slug'],
-            'description' => $newArticle['description'],
-            'prix' => $newArticle['prix']
-        ]);
-        return response($article,201);
-    } 
+        if($validator->fails()){
+
+            $errors = $validator->errors();
+            $errorList = [];
+
+            foreach ($errors->keys() as $champ) {
+                $errorList[$champ] = $errors->first($champ);
+            }
+
+            return response()->json([
+                'status'=>422,
+                'errors'=>$errorList],422
+                );
+        }
+        else{
+    $article= Article::create([
+        'code' => $request->code,
+        'libelle' => $request->libelle,
+        'slug' => $request->slug,
+        'description' => $request->description,
+        'prix' => $request->prix,
+    ]);
+
+    if($article) {
+
+        return response()->json([
+            'status'=>200,
+            'message'=>"Ajout OKK",
+            'article'=>$article], 200);
+    } else {
+        return response()->json(
+            [
+            'status'=>500,
+            'message'=>"NON OKK"],
+            500
+        );
+    }
+}
+
+    }
 
     /**
      * Display the specified resource.

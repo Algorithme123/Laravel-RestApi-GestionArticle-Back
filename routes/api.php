@@ -44,6 +44,10 @@ Route::get('/articles/search/{libelle}',[ArticleController::class,'search']);
 
 
 
+
+    Route::post('/articles',[ArticleController::class,'store']);
+
+
 /* ---------------------------------------------------------------------------------------------------
 
                                     Protected routes
@@ -51,8 +55,8 @@ Route::get('/articles/search/{libelle}',[ArticleController::class,'search']);
 ---------------------------------------------------------------------------------------------------- */
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
-    Route::post('/articles',[ArticleController::class,'store']);
-    Route::put('/articles/{id}',[ArticleController::class,'update']);
+    // Route::post('/articles',[ArticleController::class,'store']);
+    // Route::put('/articles/{id}',[ArticleController::class,'update']);
     Route::delete('/articles/{id}',[ArticleController::class,'destroy']);
 
     // logout
